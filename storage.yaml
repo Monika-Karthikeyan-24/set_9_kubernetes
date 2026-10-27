@@ -1,0 +1,29 @@
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: storage-pod
+spec:
+  containers:
+    - name: storage-container
+      image: nginx:latest
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: storage-volume
+          mountPath: /usr/share/nginx/html/storage
+  volumes:
+    - name: storage-volume
+      persistentVolumeClaim:
+        claimName: my-pvc
